@@ -217,7 +217,7 @@ fig.add_trace(go.Pie(labels = new_df_cinema['film_code'],
 
 fig.update_layout(
     title={
-        'text': 'Doanh thu trung bình của các ngày trong tuần',
+        'text': 'Tỉ trọng doanh thu theo rạp và phim',
         'x': 0.5,  # Giữa trục x
         'xanchor': 'center',  # Căn giữa theo trục x
         'yanchor': 'top'  # Căn theo trục y
