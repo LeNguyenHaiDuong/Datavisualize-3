@@ -197,7 +197,6 @@ def top_n_and_other(df, n):
         new_df.at['film_code', 'new'] = 'other'
     except:
         new_df.at['cinema_code', 'new'] = 'other'
-    st.dataframe(new_df.T)
     return new_df.T
          
 
