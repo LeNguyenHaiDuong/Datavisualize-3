@@ -103,7 +103,7 @@ def movie_chart(df, film_code):
     return fig
 
 #Read data from csv
-df = pd.read_csv('../datasets/cinemaTicket_Ref.csv', index_col=0)
+df = pd.read_csv('../datasets/data_preprocess.csv', index_col=0)
 
 st.set_page_config(
     page_title = 'Bảng xếp hạng phim',
@@ -115,9 +115,9 @@ st.sidebar.markdown("Dashboard giúp người dùng xem bảng xếp hạng phim
 st.title("Bảng xếp hạng phim")
 
 #Filter
-ranking_by_filter = st.selectbox("Xếp hạng theo", pd.Series(["Tổng doanh thu", "Số lượng vé bán ra", "Tỉ lệ hủy vé"]))
-order_by_filter = st.selectbox("Thứ tự", pd.Series(["Tăng dần", "Giảm dần"]))
-month_filter = st.slider('Thời gian (3/2018 - 11/2018)', 3, 11, 3)
+ranking_by_filter = st.sidebar.selectbox("Xếp hạng theo", pd.Series(["Tổng doanh thu", "Số lượng vé bán ra", "Tỉ lệ hủy vé"]))
+order_by_filter = st.sidebar.selectbox("Thứ tự", pd.Series(["Tăng dần", "Giảm dần"]))
+month_filter = st.sidebar.slider('Thời gian (3/2018 - 11/2018)', 3, 11, 3)
 
 if ranking_by_filter == 'Tổng doanh thu':
     fig, data = total_sales_ranking(df, month_filter, asc=order_by_filter=='Tăng dần')
