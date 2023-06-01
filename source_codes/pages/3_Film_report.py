@@ -109,20 +109,37 @@ def set_title(fig, x_title, y_title, chart_title):
     )
     return fig
 
-def daily_sales_chart():
+
+
+def daily_sales_chart(type):
     sales_by_day = month_df.groupby('date')['total_sales'].sum()
-    fig = px.line(sales_by_day, x = sales_by_day.index, y = sales_by_day.values)
+    if type == 'line':
+        fig = px.line(sales_by_day, x = sales_by_day.index, y = sales_by_day.values)
+    elif type =='scatter':
+        fig = px.scatter(sales_by_day, x = sales_by_day.index, y = sales_by_day.values)
+    elif type =='bar':
+        fig = px.bar(sales_by_day, x = sales_by_day.index, y = sales_by_day.values)
     fig = set_title(fig, "Ngày", "Doanh thu", "Doanh thu các ngày trong tháng")
     return fig
 
-def daily_tickets_chart():
+def daily_tickets_chart(type):
     tickets_by_day = month_df.groupby('date')['tickets_sold'].sum()
-    fig = px.line(tickets_by_day, x = tickets_by_day.index, y = tickets_by_day.values)
+    if type =='line':
+        fig = px.line(tickets_by_day, x = tickets_by_day.index, y = tickets_by_day.values)
+    elif type == 'scatter':
+        fig = px.scatter(tickets_by_day, x = tickets_by_day.index, y = tickets_by_day.values)
+    elif type =='bar':
+        fig = px.bar(tickets_by_day, x = tickets_by_day.index, y = tickets_by_day.values)
     fig = set_title(fig, "Ngày", "Số vé bán", "Số vé bán các ngày trong tháng")
     return fig
-def daily_show_time_chart():
+def daily_show_time_chart(type):
     show_time_by_day = month_df.groupby('date')['show_time'].sum()
-    fig = px.line(show_time_by_day, x = show_time_by_day.index, y = show_time_by_day.values)
+    if type == 'line':
+        fig = px.line(show_time_by_day, x = show_time_by_day.index, y = show_time_by_day.values)
+    elif type =='scatter':
+        fig = px.scatter(show_time_by_day, x = show_time_by_day.index, y = show_time_by_day.values)
+    elif type =='bar':
+        fig = px.bar(show_time_by_day, x = show_time_by_day.index, y = show_time_by_day.values)
     fig = set_title(fig, "Ngày", "Số suất chiếu", "Số suất chiếu các ngày trong tháng")
     return fig
 
@@ -215,21 +232,44 @@ with col4:
     st.metric("Tổng số vé bán ra", '{:,.0f}'.format(total_tickets), str(round(raise_tickets, 2)) + '%')
 
 ###================= Row 1
+tab1, tab2, tab3 = st.tabs(["Bar", "Line", "Scatter"])
 
-fig = daily_sales_chart()
-st.plotly_chart(fig, use_container_width = True)
-
+with tab1:
+    fig = daily_sales_chart('bar')
+    st.plotly_chart(fig, use_container_width = True)
+with tab2:
+    fig = daily_sales_chart('line')
+    st.plotly_chart(fig, use_container_width = True)
+with tab3:
+    fig = daily_sales_chart('scatter')
+    st.plotly_chart(fig, use_container_width = True)
 ####================= Row 2:
 col1, col2 = st.columns([5, 5])
 
-fig1 = daily_tickets_chart()
-fig2 = daily_show_time_chart()
-
 with col1:
-    st.plotly_chart(fig1, use_container_width=True)
+    tab1, tab2, tab3 = st.tabs(["Bar", "Line", "Scatter"])
+    with tab1:
+        fig1 = daily_tickets_chart('bar')
+        st.plotly_chart(fig1, use_container_width=True)
+    with tab2:
+        fig1 = daily_tickets_chart('line')
+        st.plotly_chart(fig1, use_container_width=True)      
+    with tab3:
+        fig1 = daily_tickets_chart('scatter')
+        st.plotly_chart(fig1, use_container_width=True)     
+tab1, tab2, tab3 = st.tabs(["Line", "Scatter", "Bar"])
 
 with col2:
-    st.plotly_chart(fig2, use_container_width=True)
+    tab1, tab2, tab3 = st.tabs(["Bar", "Line", "Scatter"])
+    with tab1:
+        fig1 = daily_show_time_chart('bar')
+        st.plotly_chart(fig1, use_container_width=True)
+    with tab2:
+        fig1 = daily_show_time_chart('line')
+        st.plotly_chart(fig1, use_container_width=True)      
+    with tab3:
+        fig1 = daily_show_time_chart('scatter')
+        st.plotly_chart(fig1, use_container_width=True)     
 
 ####===================== Row 3
 col1, col2 = st.columns((3.5, 6.5))
