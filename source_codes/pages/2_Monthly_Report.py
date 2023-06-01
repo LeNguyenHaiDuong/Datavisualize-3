@@ -24,27 +24,27 @@ with st.sidebar:
     
     st.sidebar.subheader('Top phim trong tháng')
     size = len(month_df['film_code'].unique())
-    top_n_film = st.selectbox(label = 'Choose top film', options = range(1, size + 1))
+    top_n_film = st.slider('Choose top film', 1, size, min(size, 5))
     
     st.sidebar.subheader('Top rạp trong tháng')
     size = len(month_df['cinema_code'].unique())
-    top_n_cinema = st.selectbox(label = 'Choose top cinema', options = range(1, size + 1))
+    top_n_cinema = st.slider('Choose top cinema', 1, size, min(size, 5))
     
-    st.subheader('Độ cao hàng 1')
+    st.subheader('Độ cao hàng top doanh thu')
     plot1_height = st.sidebar.slider('Specify first row height', 350, 500, 400)
     
     st.sidebar.subheader('Donut Chart')
     size = len(month_df['film_code'].unique())
-    n_film = st.selectbox(label = 'Choose num film', options = range(1, min(5, size + 1)))
+    n_film = st.slider('Choose num film', 1, size, min(size, 2))
     
     st.sidebar.subheader('Top rạp trong tháng')
     size = len(month_df['cinema_code'].unique())
-    n_cinema = st.selectbox(label = 'Choose num cinema', options = range(1, min(5, size + 1)))
+    n_cinema =  st.slider('Choose num cinema', 1, size, min(size, 2))
     
     st.sidebar.subheader('Doanh thu theo ngày')
-    chart1_type = st.selectbox(label = 'Choose type', options = ['line', 'scatter'])
+    chart1_type = st.selectbox(label = 'Choose type', options = ['scatter', 'line'])
     
-    st.subheader('Độ cao hàng 3')
+    st.subheader('Độ cao hàng doanh thu theo ngày')
     plot2_height = st.sidebar.slider('Specify second row height', 350, 500, 400)
     
     
@@ -61,7 +61,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(f'<h1 class="title">BÁO CÁO RẠP PHIM THÁNG {month_filter}</h1>', unsafe_allow_html=True)
+st.markdown(f'<h1 class="title">BÁO CÁO TỔNG THỂ THÁNG {month_filter}</h1>', unsafe_allow_html=True)
 # st.title(f"BÁO CÁO RẠP PHIM THÁNG {month_filter}")
 
 ### Row 1
@@ -212,7 +212,8 @@ fig.update_layout(
         'x': 0.5,  # Giữa trục x
         'xanchor': 'center',  # Căn giữa theo trục x
         'yanchor': 'top'  # Căn theo trục y
-    }
+    },
+    showlegend=False
 )
 
 with col2:
@@ -227,19 +228,9 @@ temp.columns = ['date', 'total_sales']
 temp['date'] = pd.to_datetime(temp['date'])
 
 if chart1_type == 'scatter':
-    temp['peak'] = 0
-    for i in temp['date'].values:
-        i = pd.to_datetime(i)
-        batch = temp[(temp['date'] > i - pd.DateOffset(days = 10)) & (temp['date'] < i + pd.DateOffset(days = 10))]
-        if temp[temp['date'] == i]['total_sales'].values == max(batch['total_sales'].values):
-            temp.loc[temp['date'] == i, 'peak'] += 1
-
-    temp.loc[temp['peak'] == 0, 'color'] = 'blue'
-    temp.loc[temp['peak'] == 1, 'color'] = 'red'
-
+    
     fig = px.scatter(temp, x = 'date', y = 'total_sales')
-    fig.update_traces(marker_color = temp['color'])
-
+    
 elif chart1_type == 'line':
     fig = px.line(temp, x = 'date', y = 'total_sales')
     
@@ -258,6 +249,4 @@ fig.update_layout(
 with col[0]:
     st.plotly_chart(fig, use_container_width = True)
 
-### Row 4
-st.markdown(f'<h1 class="title">Mô hình ARIMA dự đoán doanh thu</h1>', unsafe_allow_html=True)
 
