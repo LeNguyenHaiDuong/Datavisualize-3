@@ -257,7 +257,6 @@ with col1:
     with tab3:
         fig1 = daily_tickets_chart('scatter')
         st.plotly_chart(fig1, use_container_width=True)     
-tab1, tab2, tab3 = st.tabs(["Line", "Scatter", "Bar"])
 
 with col2:
     tab1, tab2, tab3 = st.tabs(["Bar", "Line", "Scatter"])
